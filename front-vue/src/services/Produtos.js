@@ -29,16 +29,23 @@ export default {
         return http.put(`/produto/${id}`, produto);
     },
 
+    // Enum Categoria
     ListCateg: () => {
         return http.get('/Categorias');
 
     },
 
+    // Enum Status
     ListStatus: () => {
         return http.get('/Status');
     },
 
+    // Buscar pelo Nome
     Buscar: (nome) => {
         return http.get(`/produto/${nome}`)
     },
+
+    updateProduto(id, data) {
+        return http.put(`/produtos/${id}`, data);
+      }
 }

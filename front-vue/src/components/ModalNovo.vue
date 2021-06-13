@@ -50,18 +50,6 @@
                 ></ejs-combobox>
               </div>
 
-
-
-        <v-flex xs12>
-        <v-combobox
-          v-model="select"
-          :items="items"
-          chips
-          label="I use chips"
-        ></v-combobox>
-      </v-flex>
-
-
                <label class="Titulo">Status </label>
               <div class="combobox">
                 <ejs-combobox

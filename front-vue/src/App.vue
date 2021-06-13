@@ -12,7 +12,7 @@
     <div class="gerenciar_produto">
       <h4>Gerenciar Produto</h4>
        <input class="InputP" type="text" placeholder="Pesquisar nome do produto"/>
-        <button type="button" @click="filtroBuscar" class="btn btn-primary" >Pesquisar</button>
+        <button type="button" class="btn btn-primary" >Pesquisar</button>
      
       <div class="custom-table-responsive coolTable" id="checkboxes">
         <table v-if="produtos.length > 0" class="table custom-table">
@@ -53,15 +53,18 @@
               <td>{{produto.categoria}}</td>
                <td>{{produto.status}}</td>
                <td>
-              <button type="button"  class="btn btn-info">Editar</button>
+
+              <button type="button"   class="btn btn-info" @click="$root.$emit('open-ModalEdit')">Editar</button>
               <button id="btnExcluir" @click="deleteById(produto)" type="button" class="btn btn-warning">Excluir</button>
+             
             </td>
             </tr>
 
+             <!-- Modal Editar -->
+             <ModalEdit></ModalEdit>
           </tbody>
-
-          
         </table >
+            
 
         <nav aria-label="Page navigation example">
           <ul class="pagination">
@@ -89,16 +92,15 @@
 
 <script>
 import ModalNovo from './components/ModalNovo.vue';
+import ModalEdit from './components/ModalEdit.vue';
 import Produtos from "./services/Produtos";
 
 export default {
-  components: { ModalNovo, },
+  components: { ModalNovo, ModalEdit},
   data() {
     return {
       produtos: [],
       apagarProdutos: [],
-       filtro: [],
-      buscar: "",
     };
   },
 
@@ -106,25 +108,15 @@ export default {
     //Pegar todos os dados que tem no BD e lista no VUE
     Produtos.listar().then((response) => {
       this.produtos = response.data;
-     
       console.log(response.data);
-      this.filtro = response.data;
+      
     });
   }, 
 
   methods:{
 
      //Filtro de Buscar
-  filtroBuscar: function () {
-      this.filtro = this.produtos;
-      if (this.buscar == "" || this.buscar == " ") {
-        this.filtro = this.produtos;
-      } else {
-        this.filtro = this.produtos.filter(
-          (produto) => produto.nome == this.buscar
-        );
-      }
-    },
+
   
   // Deletar todos os produtos
     DeleteTodosProdutos(){
