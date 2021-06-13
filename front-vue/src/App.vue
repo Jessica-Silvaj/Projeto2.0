@@ -12,7 +12,7 @@
     <div class="gerenciar_produto">
       <h4>Gerenciar Produto</h4>
        <input class="InputP" type="text" placeholder="Pesquisar nome do produto"/>
-        <button type="button" class="btn btn-primary" >Pesquisar</button>
+        <button type="button" @click="filtroBuscar" class="btn btn-primary" >Pesquisar</button>
      
       <div class="custom-table-responsive coolTable" id="checkboxes">
         <table v-if="produtos.length > 0" class="table custom-table">
@@ -55,10 +55,9 @@
                <td>
               <button type="button"  class="btn btn-info">Editar</button>
               <button id="btnExcluir" @click="deleteById(produto)" type="button" class="btn btn-warning">Excluir</button>
-          
             </td>
-            
             </tr>
+
           </tbody>
 
           
@@ -93,11 +92,13 @@ import ModalNovo from './components/ModalNovo.vue';
 import Produtos from "./services/Produtos";
 
 export default {
-  components: { ModalNovo},
+  components: { ModalNovo, },
   data() {
     return {
       produtos: [],
       apagarProdutos: [],
+       filtro: [],
+      buscar: "",
     };
   },
 
@@ -107,13 +108,23 @@ export default {
       this.produtos = response.data;
      
       console.log(response.data);
+      this.filtro = response.data;
     });
   }, 
 
   methods:{
 
-    
-
+     //Filtro de Buscar
+  filtroBuscar: function () {
+      this.filtro = this.produtos;
+      if (this.buscar == "" || this.buscar == " ") {
+        this.filtro = this.produtos;
+      } else {
+        this.filtro = this.produtos.filter(
+          (produto) => produto.nome == this.buscar
+        );
+      }
+    },
   
   // Deletar todos os produtos
     DeleteTodosProdutos(){

@@ -39,12 +39,40 @@
               <label class="Titulo">Preço: </label>
               <input type="number" step="0.01" min="0.01" v-model="produto.preco" placeholder="Escreva o preço..."/>
             
+              
+              <label class="Titulo">Categorias</label>
+              <div class="combobox">
+                <ejs-combobox
+                  id="combobox"
+                  :dataSource="categoria"
+                  placeholder="Selecione a categoria"
+                  v-model="produto.categoria"
+                ></ejs-combobox>
+              </div>
 
-                 <!-- <label class="Titulo">Categoria: </label>
-              <input type="text" v-model="produto.categoria" placeholder="Escreva a Categoria..."/>
 
-                 <label class="Titulo">Status: </label>
-              <input type="text" v-model="produto.status" placeholder="Escreva a Categoria..."/>            -->
+
+        <v-flex xs12>
+        <v-combobox
+          v-model="select"
+          :items="items"
+          chips
+          label="I use chips"
+        ></v-combobox>
+      </v-flex>
+
+
+               <label class="Titulo">Status </label>
+              <div class="combobox">
+                <ejs-combobox
+                  id="combobox"
+                  :dataSource="status"
+                  placeholder="Selecione o status"
+                  v-model="produto.status"
+                ></ejs-combobox>
+              </div>
+
+             
             </form>
           </div>
           <div class="modal-footer">
@@ -56,7 +84,7 @@
             >
               Fecha
             </button>
-            <button @click=" CadastrarProduto()" type="button" class="btn btn-primary">
+            <button @click="Cadastro()" type="button" class="btn btn-primary">
               Salvar Produtos
             </button>
           </div>
@@ -73,6 +101,9 @@
 <script>
 
 import Produtos from "../services/Produtos";
+import Vue from "vue";
+import { ComboBoxPlugin } from "@syncfusion/ej2-vue-dropdowns";
+Vue.use(ComboBoxPlugin);
 
 export default {
   data() {
@@ -91,13 +122,13 @@ export default {
     };
   },
    mounted() {
-    // Produtos.ListCateg().then((response) => {
-    //   this.categoria = response.data;
-    // });
+     Produtos.ListCateg().then((response) => {
+       this.categoria = response.data;
+     });
 
-    // Produtos.ListStatus().then((response) => {
-    //   this.status = response.data;
-    // });
+     Produtos.ListStatus().then((response) => {
+       this.status = response.data;
+     });
     
     this.listar();
   },
@@ -108,29 +139,48 @@ export default {
         this.produtos = response.data;
       });
     },
-    CadastrarProduto (){
-      Produtos.salvar(this.produto).then((response) => {
-      this.produto = response.data;
-      alert("Cadastrado com sucesso!")
-       this.listar();
-      this.errors = {};
-      })
-      .catch((e) => {
+  
+      Cadastro() {
+      Produtos.create(this.produto)
+        .then((response) => {
+          this.produto = response.data;
+          alert("Salvo com sucesso!");
+
+          this.listar();
+          this.errors = {};
+        })
+        .catch((e) => {
           this.errors = e.response.data.errors;
         });
-    }
+
+      window.location.reload();
+    },
+  
   },
   
   created() {
+
     this.$root.$on("open-ModalNovo", () => {
-      this.visible = true;
+      this.visible = true; 
     });
-  },
+  }
 };
 </script>
 
 
 <style scoped>
+@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-vue-dropdowns/styles/material.css";
+
+.combobox {
+  padding-top: -20px;
+  flex-direction: column;
+  margin-left: 2px;
+  width: 460px;
+  border-radius: 10px;
+  border: none;
+}
 
 .Titulo {
   margin-left: 15px;
